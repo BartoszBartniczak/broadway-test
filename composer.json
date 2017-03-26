@@ -1,0 +1,21 @@
+{
+  "name": "bartoszbartniczak/broadway-test",
+  "description": "description_text",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "author's name",
+      "email": "email@example.com"
+    }
+  ],
+  "require": {
+    "broadway/broadway": "1.0.0",
+    "ramsey/uuid": "^3.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "BartoszBartniczak\\Demo\\": "src/"
+    }
+  }
+}
