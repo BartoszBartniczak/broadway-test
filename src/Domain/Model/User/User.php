@@ -24,7 +24,7 @@ class User extends Entity
 
     public function getIdentity(): Identity
     {
-        return $this->getIdentity();
+        return $this->id;
     }
 
     public static function createNew(Id $id):User
