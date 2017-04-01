@@ -7,11 +7,15 @@
 namespace BartoszBartniczak\Demo\Domain\Model\User\Event;
 
 
+use BartoszBartniczak\Demo\Domain\Model\User\Id;
+
 class UserWasCreated extends Event
 {
     public static function deserialize(array $data)
     {
-        return new self($data[self::KEY_BASKET_ID]);
+        return new self(
+           new Id( $data[self::KEY_BASKET_ID] )
+        );
     }
 
 

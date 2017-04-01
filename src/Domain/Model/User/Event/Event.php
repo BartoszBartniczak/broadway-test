@@ -20,11 +20,11 @@ abstract class Event implements Serializable
 
     /**
      * Event constructor.
-     * @param Id $basketId
+     * @param Id $userId
      */
-    public function __construct(Id $basketId)
+    public function __construct(Id $userId)
     {
-        $this->userId = $basketId;
+        $this->userId = $userId;
     }
 
     /**
