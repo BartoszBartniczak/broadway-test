@@ -28,7 +28,7 @@ class UserCommandHandler extends SimpleCommandHandler
         $this->commandHandler = $commandHandler;
     }
 
-    public function handleCreateNewUser(CreateNewUserCommand $createNewUserCommand)
+    public function handleCreateNewUserCommand(CreateNewUserCommand $createNewUserCommand)
     {
         return $this->commandHandler->handleCreateNewUser($createNewUserCommand);
     }

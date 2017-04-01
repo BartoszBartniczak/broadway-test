@@ -36,7 +36,7 @@ class User extends Entity
 
     public function applyUserWasCreated(UserWasCreated $userWasCreated){
 
-        $this->id = $userWasCreated->getUserId()->getValue();
+        $this->id = $userWasCreated->getUserId();
 
     }
 
