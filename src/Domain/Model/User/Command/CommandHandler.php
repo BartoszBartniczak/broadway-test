@@ -19,6 +19,16 @@ class CommandHandler implements CommandHandlerInterface
      */
     private $repository;
 
+    /**
+     * CommandHandler constructor.
+     * @param UserRepository $repository
+     */
+    public function __construct(UserRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
+
     public function handleCreateNewUser(CreateNewUserCommand $command)
     {
 
