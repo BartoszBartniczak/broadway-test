@@ -10,13 +10,15 @@ namespace BartoszBartniczak\Demo\Application\Service\Repository;
 use BartoszBartniczak\Demo\Domain\Model\Entity;
 use BartoszBartniczak\Demo\Domain\Model\Identity;
 use BartoszBartniczak\Demo\Domain\Model\User\User;
+use BartoszBartniczak\Demo\Domain\Service\Repository\User\CannotFindUserException;
 use Broadway\EventHandling\EventBus;
 use Broadway\EventSourcing\AggregateFactory\AggregateFactory;
 use Broadway\EventSourcing\AggregateFactory\PublicConstructorAggregateFactory;
 use Broadway\EventSourcing\EventSourcingRepository;
 use Broadway\EventStore\EventStore;
+use Broadway\Repository\AggregateNotFoundException;
 
-class UserRepository implements \BartoszBartniczak\Demo\Domain\Service\Repository\UserRepository
+class UserRepository implements \BartoszBartniczak\Demo\Domain\Service\Repository\User\UserRepository
 {
 
     /**
@@ -29,7 +31,7 @@ class UserRepository implements \BartoszBartniczak\Demo\Domain\Service\Repositor
         $aggregateClass = User::class;
         $aggregateFactory = new PublicConstructorAggregateFactory();
 
-       $this->eventSourcingRepository =  new EventSourcingRepository($eventStore, $eventBus, $aggregateClass, $aggregateFactory, $eventStreamDecorators);
+        $this->eventSourcingRepository = new EventSourcingRepository($eventStore, $eventBus, $aggregateClass, $aggregateFactory, $eventStreamDecorators);
     }
 
     /**
@@ -42,11 +44,25 @@ class UserRepository implements \BartoszBartniczak\Demo\Domain\Service\Repositor
 
     /**
      * @param Identity $identity
-     * @return \Broadway\Domain\AggregateRoot|\Broadway\EventSourcing\EventSourcedAggregateRoot
+     * @return User
+     * @throws CannotFindUserException
      */
     public function load(Identity $identity)
     {
-        return $this->eventSourcingRepository->load($identity);
+        try {
+            $user =  $this->eventSourcingRepository->load($identity);
+            /* @var $user User */
+            return $user;
+        } catch (AggregateNotFoundException $aggregateNotFoundException) {
+            throw new CannotFindUserException(
+                sprintf(
+                    "User with email '%s' does not exists.",
+                    $identity->getValue()
+                ),
+                null,
+                $aggregateNotFoundException
+            );
+        }
     }
 
 

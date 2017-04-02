@@ -7,14 +7,41 @@
 namespace BartoszBartniczak\Demo\Domain\Model\User\Event;
 
 
-use BartoszBartniczak\Demo\Domain\Model\User\Id;
+use BartoszBartniczak\Demo\Domain\Model\User\Name;
+use BartoszBartniczak\Demo\Domain\ValueObject\Email;
 
 class UserWasCreated extends Event
 {
+    /**
+     * @var Name
+     */
+    private $name;
+
+    public function __construct(Email $email, Name $name)
+    {
+        parent::__construct($email);
+        $this->name = $name;
+    }
+
+    public function serialize()
+    {
+        return array_merge(
+            parent::serialize(),
+            [
+                'name'=> [
+                    'firstName'=>$this->name->getFirstName(),
+                    'lastName'=>$this->name->getLastName()
+                ]
+            ]
+            );
+    }
+
+
     public static function deserialize(array $data)
     {
         return new self(
-           new Id( $data[self::KEY_BASKET_ID] )
+           new Email( $data[self::USER_EMAIL] ),
+            new Name( $data['name']['firstName'], $data['name']['lastName'] )
         );
     }
 

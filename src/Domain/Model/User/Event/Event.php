@@ -7,32 +7,33 @@
 namespace BartoszBartniczak\Demo\Domain\Model\User\Event;
 
 use BartoszBartniczak\Demo\Domain\Model\User\Id;
+use BartoszBartniczak\Demo\Domain\ValueObject\Email;
 use Broadway\Serializer\Serializable;
 
 abstract class Event implements Serializable
 {
-    const KEY_BASKET_ID = 'basketId';
+    const USER_EMAIL = 'userEmail';
 
     /**
      * @var Id
      */
-    private $userId;
+    private $email;
 
     /**
      * Event constructor.
-     * @param Id $userId
+     * @param Email $email
      */
-    public function __construct(Id $userId)
+    public function __construct(Email $email)
     {
-        $this->userId = $userId;
+        $this->email = $email;
     }
 
     /**
      * @return Id
      */
-    public function getUserId(): Id
+    public function getEmail(): Id
     {
-        return $this->userId;
+        return $this->email;
     }
 
     /**
@@ -41,9 +42,11 @@ abstract class Event implements Serializable
     public function serialize()
     {
         return [
-            self::KEY_BASKET_ID=>$this->getUserId()->getValue(),
+            self::USER_EMAIL=>$this->getEmail()->getValue(),
         ];
     }
+
+
 
 
 }

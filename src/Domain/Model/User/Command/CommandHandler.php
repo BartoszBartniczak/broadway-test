@@ -8,7 +8,8 @@ namespace BartoszBartniczak\Demo\Domain\Model\User\Command;
 
 
 use BartoszBartniczak\Demo\Domain\Model\User\User;
-use BartoszBartniczak\Demo\Domain\Service\Repository\UserRepository;
+use BartoszBartniczak\Demo\Domain\Service\Repository\User\UniqueUserEmailCheckerService;
+use BartoszBartniczak\Demo\Domain\Service\Repository\User\UserRepository;
 use BartoszBartniczak\Demo\Domain\Command\CommandHandler as CommandHandlerInterface;
 
 class CommandHandler implements CommandHandlerInterface
@@ -20,19 +21,32 @@ class CommandHandler implements CommandHandlerInterface
     private $repository;
 
     /**
-     * CommandHandler constructor.
-     * @param UserRepository $repository
+     * @var UniqueUserEmailCheckerService
      */
-    public function __construct(UserRepository $repository)
+    private $uniqueUserEmailCheckerService;
+
+    /**
+     * CommandHandler constructor.
+     * @param \BartoszBartniczak\Demo\Domain\Service\Repository\User\UserRepository $repository
+     * @param UniqueUserEmailCheckerService $uniqueUserEmailCheckerService
+     */
+    public function __construct(UserRepository $repository, UniqueUserEmailCheckerService $uniqueUserEmailCheckerService)
     {
+        $this->uniqueUserEmailCheckerService = $uniqueUserEmailCheckerService;
         $this->repository = $repository;
     }
 
 
     public function handleCreateNewUser(CreateNewUserCommand $command)
     {
+        if($this->uniqueUserEmailCheckerService->isEmailRegistered($command->getEmail())){
+            throw new UserAlreadyExistsException(sprintf(
+                "User with email '%s' already exists in repository.",
+                $command->getEmail()->getValue()
+            ));
+        }
 
-        $user = User::createNew($command->getId());
+        $user = User::createNew($command->getEmail(), $command->getName());
 
         $this->repository->save($user);
 

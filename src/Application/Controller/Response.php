@@ -14,6 +14,7 @@ class Response
     const HTTP_STATUS_CREATED = 201;
 
     const HTTP_STATUS_NOT_FOUND = 404;
+    const HTTP_STATUS_CONFLICT = 409;
 
     /**
      * @var mixed

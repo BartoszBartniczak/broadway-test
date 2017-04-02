@@ -8,10 +8,13 @@ namespace BartoszBartniczak\Demo\Application\Controller;
 
 
 use BartoszBartniczak\Demo\Domain\Model\User\Command\CreateNewUserCommand;
+use BartoszBartniczak\Demo\Domain\Model\User\Command\UserAlreadyExistsException;
 use BartoszBartniczak\Demo\Domain\Model\User\Id;
+use BartoszBartniczak\Demo\Domain\Model\User\Name;
 use BartoszBartniczak\Demo\Domain\Service\UUIDGenerator;
 use BartoszBartniczak\Demo\Domain\Service\CommandBus;
-use BartoszBartniczak\Demo\Domain\Service\Repository\UserRepository as UserRepository;
+use BartoszBartniczak\Demo\Domain\Service\Repository\User\UserRepository as UserRepository;
+use BartoszBartniczak\Demo\Domain\ValueObject\Email;
 
 class UserController extends Controller
 {
@@ -44,17 +47,20 @@ class UserController extends Controller
         $this->userRepository = $userRepository;
     }
 
-    public function createNewUserAction(array $data):Response
+    public function createNewUserAction(array $data): Response
     {
 
-        $userId = new Id($this->uuidGenerator->generate());
-        $createNewUserCommand = new CreateNewUserCommand($userId);
+        $email = new Email($data['email']);
+        $name = new Name($data['name']['firstName'], $data['name']['lastName']);
 
-        $this->commandBus->dispatch($createNewUserCommand);
-
-        $user = $this->userRepository->load($userId);
-
-        return $this->jsonResponse(['user' => $user], Response::HTTP_STATUS_CREATED);
+        try {
+            $createNewUserCommand = new CreateNewUserCommand($email, $name);
+            $this->commandBus->dispatch($createNewUserCommand);
+            $user = $this->userRepository->load($email);
+            return $this->jsonResponse(['user' => $user], Response::HTTP_STATUS_CREATED);
+        } catch (UserAlreadyExistsException $alreadyExistsException) {
+            return $this->jsonResponse([], Response::HTTP_STATUS_CONFLICT);
+        }
 
     }
 

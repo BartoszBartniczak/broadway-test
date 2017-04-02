@@ -9,30 +9,31 @@ namespace BartoszBartniczak\Demo\Domain\Model\User\Command;
 
 use BartoszBartniczak\Demo\Domain\Command\Command as CommandInterface;
 use BartoszBartniczak\Demo\Domain\Model\User\Id;
+use BartoszBartniczak\Demo\Domain\ValueObject\Email;
 
 abstract class Command implements CommandInterface
 {
 
     /**
-     * @var Id
+     * @var Email
      */
-    private $id;
+    private $email;
 
     /**
      * UserCommand constructor.
-     * @param Id $id
+     * @param Email $email
      */
-    public function __construct(Id $id)
+    public function __construct(Email $email)
     {
-        $this->id = $id;
+        $this->email = $email;
     }
 
     /**
-     * @return Id
+     * @return Email
      */
-    public function getId(): Id
+    public function getEmail(): Email
     {
-        return $this->id;
+        return $this->email;
     }
 
 }

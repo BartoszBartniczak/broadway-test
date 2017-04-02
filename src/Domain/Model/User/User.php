@@ -10,33 +10,64 @@ namespace BartoszBartniczak\Demo\Domain\Model\User;
 use BartoszBartniczak\Demo\Domain\Model\Entity;
 use BartoszBartniczak\Demo\Domain\Model\Identity;
 use BartoszBartniczak\Demo\Domain\Model\User\Event\UserWasCreated;
+use BartoszBartniczak\Demo\Domain\ValueObject\Email;
 
 class User extends Entity
 {
     /**
-     * @var Id
+     * @var Email
      */
-    protected $id;
+    protected $email;
+
+    /**
+     * @var Name
+     */
+    protected $name;
 
     final public function __construct()
     {
     }
 
-    public function getIdentity(): Identity
+    /**
+     * @return Email
+     */
+    public function getEmail(): Email
     {
-        return $this->id;
+        return $this->email;
     }
 
-    public static function createNew(Id $id):User
+    /**
+     * @return Name
+     */
+    public function getName(): Name
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return Identity
+     */
+    public function getIdentity(): Identity
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param Email $email
+     * @param Name $name
+     * @return User
+     */
+    public static function createNew(Email $email, Name $name):User
     {
         $user = new User();
-        $user->apply( new UserWasCreated($id) );
+        $user->apply( new UserWasCreated($email, $name) );
         return $user;
     }
 
     public function applyUserWasCreated(UserWasCreated $userWasCreated){
 
-        $this->id = $userWasCreated->getUserId();
+        $this->email = $userWasCreated->getEmail();
+        $this->name = $userWasCreated->getName();
 
     }
 
