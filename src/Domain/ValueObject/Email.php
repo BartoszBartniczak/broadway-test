@@ -16,6 +16,15 @@ class Email implements Identity
      */
     private $value;
 
+    /**
+     * Email constructor.
+     * @param $value
+     */
+    public function __construct($value)
+    {
+        $this->value = $value;
+    }
+
     public function getValue(): string
     {
         return $this->value;
