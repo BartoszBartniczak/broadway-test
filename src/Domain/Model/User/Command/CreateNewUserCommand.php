@@ -7,6 +7,7 @@
 namespace BartoszBartniczak\Demo\Domain\Model\User\Command;
 
 
+use BartoszBartniczak\Demo\Domain\Model\User\Id;
 use BartoszBartniczak\Demo\Domain\Model\User\Name;
 use BartoszBartniczak\Demo\Domain\ValueObject\Email;
 
@@ -14,13 +15,19 @@ class CreateNewUserCommand extends Command
 {
 
     /**
+     * @var Email
+     */
+    private $email;
+
+    /**
      * @var Name
      */
     private $name;
 
-    public function __construct(Email $email, Name $name)
+    public function __construct(Id $id, Email $email, Name $name)
     {
-        parent::__construct($email);
+        parent::__construct($id);
+        $this->email = $email;
         $this->name = $name;
     }
 
@@ -30,6 +37,14 @@ class CreateNewUserCommand extends Command
     public function getName(): Name
     {
         return $this->name;
+    }
+
+    /**
+     * @return Email
+     */
+    public function getEmail(): Email
+    {
+        return $this->email;
     }
 
 }

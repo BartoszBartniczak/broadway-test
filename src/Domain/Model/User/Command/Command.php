@@ -15,25 +15,25 @@ abstract class Command implements CommandInterface
 {
 
     /**
-     * @var Email
+     * @var Id
      */
-    private $email;
+    private $id;
 
     /**
      * UserCommand constructor.
-     * @param Email $email
+     * @param Id $id
      */
-    public function __construct(Email $email)
+    public function __construct(Id $id)
     {
-        $this->email = $email;
+        $this->id = $id;
     }
 
     /**
-     * @return Email
+     * @return Id
      */
-    public function getEmail(): Email
+    public function getId(): Id
     {
-        return $this->email;
+        return $this->id;
     }
 
 }

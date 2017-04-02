@@ -42,11 +42,11 @@ class CommandHandler implements CommandHandlerInterface
         if($this->uniqueUserEmailCheckerService->isEmailRegistered($command->getEmail())){
             throw new UserAlreadyExistsException(sprintf(
                 "User with email '%s' already exists in repository.",
-                $command->getEmail()->getValue()
+                $command->getId()->getValue()
             ));
         }
 
-        $user = User::createNew($command->getEmail(), $command->getName());
+        $user = User::createNew($command->getId(), $command->getEmail(), $command->getName());
 
         $this->repository->save($user);
 

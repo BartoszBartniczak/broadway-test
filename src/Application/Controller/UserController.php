@@ -49,12 +49,12 @@ class UserController extends Controller
 
     public function createNewUserAction(array $data): Response
     {
-
+        $id = new Id($this->uuidGenerator->generate());
         $email = new Email($data['email']);
         $name = new Name($data['name']['firstName'], $data['name']['lastName']);
 
         try {
-            $createNewUserCommand = new CreateNewUserCommand($email, $name);
+            $createNewUserCommand = new CreateNewUserCommand($id, $email, $name);
             $this->commandBus->dispatch($createNewUserCommand);
             $user = $this->userRepository->load($email);
             return $this->jsonResponse(['user' => $user], Response::HTTP_STATUS_CREATED);
