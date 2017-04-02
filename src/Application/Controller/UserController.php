@@ -56,7 +56,7 @@ class UserController extends Controller
         try {
             $createNewUserCommand = new CreateNewUserCommand($id, $email, $name);
             $this->commandBus->dispatch($createNewUserCommand);
-            $user = $this->userRepository->load($email);
+            $user = $this->userRepository->load($id);
             return $this->jsonResponse(['user' => $user], Response::HTTP_STATUS_CREATED);
         } catch (UserAlreadyExistsException $alreadyExistsException) {
             return $this->jsonResponse([], Response::HTTP_STATUS_CONFLICT);
