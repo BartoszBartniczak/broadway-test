@@ -12,28 +12,28 @@ use Broadway\Serializer\Serializable;
 
 abstract class Event implements Serializable
 {
-    const USER_EMAIL = 'userEmail';
+    const ID = 'id';
 
     /**
      * @var Id
      */
-    private $email;
+    private $id;
 
     /**
      * Event constructor.
-     * @param Email $email
+     * @param Id $id
      */
-    public function __construct(Email $email)
+    public function __construct(Id $id)
     {
-        $this->email = $email;
+        $this->id = $id;
     }
 
     /**
      * @return Id
      */
-    public function getEmail(): Id
+    public function getId(): Id
     {
-        return $this->email;
+        return $this->id;
     }
 
     /**
@@ -42,7 +42,7 @@ abstract class Event implements Serializable
     public function serialize()
     {
         return [
-            self::USER_EMAIL=>$this->getEmail()->getValue(),
+            self::ID=>$this->getId()->getValue(),
         ];
     }
 

@@ -15,6 +15,11 @@ use BartoszBartniczak\Demo\Domain\ValueObject\Email;
 class User extends Entity
 {
     /**
+     * @var Id
+     */
+    private $id;
+
+    /**
      * @var Email
      */
     protected $email;
@@ -49,7 +54,15 @@ class User extends Entity
      */
     public function getIdentity(): Identity
     {
-        return $this->email;
+        return $this->getId();
+    }
+
+    /**
+     * @return Id
+     */
+    public function getId(): Id
+    {
+        return $this->id;
     }
 
     /**
@@ -57,15 +70,16 @@ class User extends Entity
      * @param Name $name
      * @return User
      */
-    public static function createNew(Email $email, Name $name):User
+    public static function createNew(Id $id, Email $email, Name $name):User
     {
         $user = new User();
-        $user->apply( new UserWasCreated($email, $name) );
+        $user->apply( new UserWasCreated($id, $email, $name) );
         return $user;
     }
 
     public function applyUserWasCreated(UserWasCreated $userWasCreated){
 
+        $this->id = $userWasCreated->getId();
         $this->email = $userWasCreated->getEmail();
         $this->name = $userWasCreated->getName();
 
