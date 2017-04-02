@@ -15,4 +15,6 @@ interface Identity
      */
     public function getValue():string;
 
+    public function __toString():string;
+
 }
