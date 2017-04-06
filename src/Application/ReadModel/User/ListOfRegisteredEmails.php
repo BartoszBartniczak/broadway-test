@@ -20,11 +20,11 @@ class ListOfRegisteredEmails implements ListOfRegisteredEmailsInterface, Seriali
 
     /**
      * ListOfRegisteredEmails constructor.
-     * @param Email $email
+     * @param string $email
      */
-    public function __construct(Email $email)
+    public function __construct(string $email)
     {
-        $this->registerEmail($email);
+        $this->registerEmail(new Email($email));
     }
 
 
