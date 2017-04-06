@@ -7,24 +7,24 @@
 namespace BartoszBartniczak\Demo\Domain\Service\Repository\User;
 
 
-use BartoszBartniczak\Demo\Domain\Service\Repository\CannotFindUserException;
-use BartoszBartniczak\Demo\Domain\Service\Repository\User\UserRepository;
+use BartoszBartniczak\Demo\Domain\Model\User\ReadModel\ListOfRegisteredEmails;
+use Broadway\ReadModel\Repository;
 use BartoszBartniczak\Demo\Domain\ValueObject\Email;
 
 class UniqueUserEmailCheckerService
 {
     /**
-     * @var UserRepository
+     * @var Repository
      */
-    private $userRepository;
+    private $repository;
 
     /**
      * UniqueUserEmailCheckerService constructor.
-     * @param UserRepository $userRepository
+     * @param Repository $repository
      */
-    public function __construct(UserRepository $userRepository)
+    public function __construct(Repository $repository)
     {
-        $this->userRepository = $userRepository;
+        $this->repository = $repository;
     }
 
     /**
@@ -33,14 +33,7 @@ class UniqueUserEmailCheckerService
      */
     public function isEmailRegistered(Email $email):bool{
 
-        try {
-            $this->userRepository->load($email);
-        }
-        catch (\BartoszBartniczak\Demo\Domain\Service\Repository\User\CannotFindUserException $cannotFindUserException){
-            return false;
-        }
-
-        return true;
+        return $this->repository->find($email) instanceof ListOfRegisteredEmails;
 
     }
 
